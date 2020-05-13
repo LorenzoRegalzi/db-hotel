@@ -1,5 +1,5 @@
 SELECT * FROM`ospiti` WHERE `document_type` LIKE ‘c%’;
-SELECT * FROM`ospiti` WHERE `date_of_birth` > '1988'
+SELECT * FROM`ospiti` WHERE `date_of_birth` > '1989'
 SELECT * FROM`ospiti` WHERE `date_of_birth` < '2000/05/12'
 SELECT * FROM`ospiti` WHERE `name` LIKE 'D%'
 SELECT COUNT(status) FROM `pagamenti` WHERE `status` LIKE 'a%'
