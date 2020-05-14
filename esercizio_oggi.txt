@@ -1,2 +1,67 @@
+1
+SELECT COUNT(`id`) AS 'anno di nascita',
+YEAR(`date_of_birth`)
+FROM `ospiti`
+GROUP BY YEAR(`date_of_birth`)
 
-2 SELECT SUM(price), `status` FROM pagamenti GROUP BY `status`
+2
+SELECT SUM(price), `status` FROM pagamenti GROUP BY `status`
+
+3
+SELECT stanza_id,
+count(id)
+FROM prenotazioni
+GROUP BY stanza_id
+
+4
+SELECT TIME_FORMAT(created_at, "%h %p") AS 'orario prenotazioni', count(id) 'numero prenotazioni'
+FROM prenotazioni
+GROUP BY TIME_FORMAT(created_at, "%h %p")
+ORDER BY count(id) ASC
+
+5
+SELECT COUNT(prenotazione_id)
+FROM `prenotazioni_has_ospiti`
+GROUP BY ospite_id
+ORDER BY COUNT(prenotazione_id) DESC
+
+
+1
+SELECT prenotazioni_has_ospiti.prenotazione_id, ospiti.lastname
+FROM prenotazioni_has_ospiti INNER JOIN ospiti
+ON prenotazioni_has_ospiti.ospite_id = ospiti.id
+
+2
+
+SELECT paganti.id, paganti.name, paganti.lastname, pagamenti.price, DATE_FORMAT(prenotazioni.created_at, "%Y %m")
+FROM pagamenti
+INNER JOIN paganti
+ON pagamenti.pagante_id = paganti.id
+INNER JOIN prenotazioni
+ON pagamenti.prenotazione_id = prenotazioni.id
+WHERE YEAR(prenotazioni.created_at) = '2018'
+AND MONTH(prenotazioni.created_at) = '05';
+
+3
+SELECT stanze.floor, SUM(pagamenti.price)
+FROM prenotazioni INNER JOIN pagamenti
+ON prenotazioni.id = pagamenti.prenotazione_id
+INNER JOIN stanze
+ON stanze.id = prenotazioni.stanza_id
+GROUP BY stanze.floor
+HAVING stanze.floor = '1'
+
+4
+SELECT paganti.name, paganti.lastname, paganti.address, prenotazioni.id
+FROM prenotazioni
+INNER JOIN pagamenti
+ON prenotazioni.id = pagamenti.prenotazione_id
+INNER JOIN paganti
+ON paganti.id = pagamenti.pagante_id
+WHERE prenotazioni.id = '7'
+
+5
+SELECT stanze.id , stanze.room_number
+FROM stanze LEFT JOIN prenotazioni
+ON stanze.id = prenotazioni.stanza_id
+where prenotazioni.stanza_id IS NULL
